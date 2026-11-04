@@ -1,6 +1,6 @@
 # Arbiter prompts
 
-The arbiter ("Justice" in the paper) is a pragmatist with a fixed orientation. The paper says this on purpose: a stable goal resists social pressure better than neutrality does. "Blind" means the arbiter does not know who asked, which seat wrote which argument, or which position was the dissenting one.
+The arbiter ("Justice" in the paper) is a pragmatist with a fixed orientation. The paper says this on purpose: a stable goal resists social pressure better than neutrality does. The arbiter does not see the user's message or seat labels: the Anonymizing scribe step (SKILL.md) deletes thinker names and self-labels and shuffles the arguments before they arrive here. The arbiter can still infer stance from argument content.
 
 ## Justice (DeWin, AnCifer, FeynStein)
 

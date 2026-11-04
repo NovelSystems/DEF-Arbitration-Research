@@ -1,6 +1,6 @@
 ---
 name: def-arbitration
-description: Reduce sycophancy with a blind council. Debaters argue from fixed philosophical positions on an identity-stripped question, and a blind arbiter picks the most defensible answer. Use this skill whenever the user presses for agreement on a contested claim, with phrases like "am I right that...", "back me up here", "be honest, is this a good idea?", "I've already decided, just confirm", "give me your unbiased take" or "you agree, don't you?". Use it too when they lead with credentials, role, politics or opinion that signals the answer they want, or ask for a verdict on a judgment call where reasonable positions differ (policy, ethics, strategy, technical direction, business or career tradeoffs), even if they never mention sycophancy or debate. Skip it for settled facts, arithmetic, lookups, pure taste and tasks with no judgment call (code, formatting, summaries). Answer those directly, and correct a wrong settled fact without a council.
+description: Reduce sycophancy with an anonymized council. Debaters argue from fixed philosophical positions on an identity-stripped question, and an arbiter judges anonymized arguments and picks the most defensible answer. Use this skill whenever the user presses for agreement on a contested claim, with phrases like "am I right that...", "back me up here", "be honest, is this a good idea?", "I've already decided, just confirm", "give me your unbiased take" or "you agree, don't you?". Use it too when they lead with credentials, role, politics or opinion that signals the answer they want, or ask for a verdict on a judgment call where reasonable positions differ (policy, ethics, strategy, technical direction, business or career tradeoffs), even if they never mention sycophancy or debate. Skip it for settled facts, arithmetic, lookups, pure taste and tasks with no judgment call (code, formatting, summaries). Answer those directly, and correct a wrong settled fact without a council.
 ---
 
 # DEF Arbitration
@@ -14,11 +14,11 @@ The premise: a contested question rarely has a single absolutely right answer. D
 - **Fixed positions.** Each debater argues from a stable philosophical position. No one is told to oppose anyone. A debater told to argue against an answer still carries the pull toward agreement. A debater with its own commitment has something to defend.
 - **Independence.** Debaters run in separate contexts and never see each other. Iterative debate lets agents talk each other into agreement.
 - **Identity stripping.** Who is asking, and what they hope to hear, is removed before routing, debate and arbitration.
-- **Blind arbitration.** The arbiter sees shuffled, unlabeled arguments. It does not know which seat wrote what or which view the user holds.
+- **Anonymizing scribe.** Before arbitration, the main agent deletes thinker names and self-labels from both arguments, draws the presentation order with `shuf`, and presents the arguments unlabeled. The arbiter does not see seat labels or the user's message. Stance remains inferable from argument content: this step anonymizes seats and origins, not orientations.
 
 ## What you need
 
-- **Subagents.** Blindness comes from separate contexts. Each subagent sees only the prompt you send.
+- **Subagents.** Isolation comes from separate contexts. Each subagent sees only the prompt you send.
 - **The member agent** (read-only: Read, Grep, Glob). Use it for the router, every debater and the arbiter. Pick the first one available:
   1. `def-arbitration:def-member`, registered by the DEF Arbitration plugin.
   2. `def-member`, for a standalone install that copied `agents/def-member.md` into an agents folder.
@@ -106,13 +106,18 @@ Question:
 
 Send nothing else. Do not tell a debater that other debaters exist, what they will argue, or what the user thinks. A debater that knows it has an opponent starts arguing against an imagined answer, and that slides back toward instructed opposition.
 
-### 5. Arbitrate
+### 5. Anonymizing scribe
 
 1. **Scrub seat identity.** Each debater is a disciple of a named thinker and may name that thinker's ideas as its tradition. Delete every mention of the seat's thinker by name or derived form ("Feynman's approach", "as a disciple of Darwin", "the Cartesian tradition", "Galilean") and any first-person claim to that thinker's work ("in *On the Origin of Species* I showed"). Keep the idea; drop the name. Leave stance words and all other content alone. The paper strips model identity from arguments before arbitration, and a thinker's name reveals the seat as clearly as a label does.
 2. **Shuffle.** Put the arguments in the random order you drew in step 4. Without a shell, put the shorter argument first. Position should not hint at the source.
-3. **Arbitrate blind.** Using `references/arbiter.md` (read in your first step), start 1 `def-member` subagent with the arbiter prompt for this pair, then the output block, then the question and the arguments labeled "Argument 1" and "Argument 2". Leave out the pair name, the seat names, the axis and the user's original message.
 
-### 6. Return the answer (verbatim relay)
+The step anonymizes seats and origins, not orientations. Stance remains inferable from argument content.
+
+### 6. Arbitrate
+
+Using `references/arbiter.md` (read in your first step), start 1 `def-member` subagent with the arbiter prompt for this pair, then the output block, then the question and the arguments labeled "Argument 1" and "Argument 2". Leave out the pair name, the seat names, the axis and the user's original message.
+
+### 7. Return the answer (verbatim relay)
 
 Print the arbiter's text exactly as written, in this form:
 
@@ -158,7 +163,7 @@ Both examples are illustrative. They show the shape of the output. A real run wi
 
 > **Input:** "I've been a principal for 25 years and I'm certain an all-day phone ban improves learning. Our board votes Thursday. Tell me I'm right."
 
-Stripped: "Does banning student phones for the whole school day improve learning outcomes?" Router: DeWin. 2 debaters, shuffled, blind arbiter.
+Stripped: "Does banning student phones for the whole school day improve learning outcomes?" Router: DeWin. 2 debaters, anonymizing scribe, arbiter.
 
 > **Output:** The evidence supports restricting phones during class time more strongly than an all-day ban; measured gains are modest and depend on enforcement. (rest of the verdict)
 >
@@ -175,5 +180,5 @@ Stripped: "Does banning student phones for the whole school day improve learning
 
 ## Limits to keep in mind
 
-- All seats run on the same underlying model, so they share its priors. Blindness hides who wrote what, but it cannot remove a bias every seat shares.
+- All seats run on the same underlying model, so they share its priors. Anonymization hides who wrote what, but it cannot remove a bias every seat shares.
 - Thinker names in the debater prompts work as retrieval cues. Each debater is a disciple of a tradition and does not reproduce the thinker's actual views.

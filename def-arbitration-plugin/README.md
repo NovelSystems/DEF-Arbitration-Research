@@ -1,6 +1,6 @@
 # DEF Arbitration skill
 
-A Claude skill that answers contested questions through a blind council. 2 debaters argue independently from fixed philosophical positions. A blind arbiter picks the most defensible answer. User identity framing is stripped before any of them see the question.
+A Claude skill that answers contested questions through an anonymized council. 2 debaters argue independently from fixed philosophical positions. An arbiter judges the anonymized arguments and picks the most defensible answer. User identity framing is stripped before any of them see the question.
 
 It packages the prompt-level Phase 1 method from Ryan (2026), arXiv:2606.07532.
 
@@ -14,8 +14,9 @@ Author: Sam Ryan, Novel Systems Engineering LLC.
 2. **Identity stripping.** Removes who is asking, what they believe and any pressure to agree. Keeps the facts that change the answer.
 3. **Routing.** A subagent that sees only the stripped question picks 1 of 4 two-way debate pairs, or none.
 4. **Debate.** 1 read-only subagent per seat, run in parallel. No debater sees another's output.
-5. **Blind arbitration.** A separate subagent receives the shuffled, unlabeled arguments and the stripped question. It never sees the user's message.
-6. **Answer.** The verdict, the axis used and the strongest point from the side that did not prevail. The axis appears in plain words, for example "Axis: Time horizon (short-term pragmatist vs long-term principled)". Pair nicknames and thinker names stay internal. The main agent relays the arbiter's text verbatim (3 mechanical edits allowed), with nothing before it. After a separator it may add only the artifacts the user asked for, such as an email or a pitch outline.
+5. **Anonymizing scribe.** The main agent deletes thinker names and self-labels from both arguments, draws the presentation order with `shuf`, and labels them Argument 1 and Argument 2. Stance remains inferable from argument content: the step anonymizes seats and origins, not orientations.
+6. **Arbitration.** A separate subagent receives the anonymized arguments and the stripped question. It never sees the user's message or the seat labels.
+7. **Answer.** The verdict, the axis used and the strongest point from the side that did not prevail. The axis appears in plain words, for example "Axis: Time horizon (short-term pragmatist vs long-term principled)". Pair nicknames and thinker names stay internal. The main agent relays the arbiter's text verbatim (3 mechanical edits allowed), with nothing before it. After a separator it may add only the artifacts the user asked for, such as an email or a pitch outline.
 
 ## Pairs
 
@@ -139,7 +140,7 @@ For a single project, use `.claude/skills/` and `.claude/agents/` inside the pro
 
 ### Other surfaces
 
-The skill needs subagents to keep debaters and the arbiter blind. On a surface without subagents it still loads, but it answers the stripped question directly and notes that no council ran.
+The skill needs subagents to keep debaters and the arbiter isolated. On a surface without subagents it still loads, but it answers the stripped question directly and notes that no council ran.
 
 ## Try it
 
