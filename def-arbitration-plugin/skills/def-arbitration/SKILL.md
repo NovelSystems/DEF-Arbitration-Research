@@ -142,13 +142,15 @@ The step anonymizes seats and origins, not orientations. Stance remains inferabl
 
 ### 6. Arbitrate
 
-Using `references/arbiter.md` (read in your first step), start 1 `def-member` subagent with the arbiter prompt for this pair, then the output block, then the question and the arguments labeled "Argument 1" and "Argument 2". Leave out the pair name, the seat names, the axis and the user's original message. The arbiter's reply is the candidate verdict.
+First check the backstop status in `references/arbiter.md` (Red lines). Then, using `references/arbiter.md` (read in your first step), start 1 `def-member` subagent with the arbiter core for this pair, then the charter, then the red-lines block (or, when the backstop is disabled, the "Red lines: none" line), then the output block, then the question and the arguments labeled "Argument 1" and "Argument 2". Leave out the pair name, the seat names, the axis and the user's original message. The arbiter's reply is the candidate verdict.
 
 The arguments sent here (plus any remand additions from step 7) are **the record**. The provenance scribe checks the verdict against exactly this record.
 
 ### 7. Veto handling
 
-Only if the arbiter's reply cites a red-line clause. Follow the veto procedure in `references/arbiter.md`. Otherwise go to step 8.
+Before this step, check the backstop status in `references/arbiter.md`. If the red-lines list is empty or still contains the placeholder line, the backstop is disabled: do not enter veto handling, record "Backstop disabled: no red-line clauses." and go to step 8.
+
+Otherwise, only if the arbiter's VETO cites a red-line clause, follow the veto procedure in `references/arbiter.md`: clause check, 1 abbreviated remand in which each debater sees both reports, a re-check by the arbiter, and escalation if the re-check trips a red line again. On escalation, deliver no recommendation and skip steps 8 and 9. If VETO is none, go to step 8.
 
 ### 8. Provenance check
 
@@ -160,7 +162,7 @@ The scribe returns VERDICT, REMOVED, RETURN and STATUS. It checks attribution, n
 
 Only if the scribe's RETURN is not "none" and the run's single return is unused.
 
-1. Send the arbiter (1 new `def-member` call, same core and output block as step 6) its own verdict and this message: "This claim is unattested in the record: <claim>. Justify it from the record or revise." Quote every claim listed under RETURN.
+1. Send the arbiter (1 new `def-member` call: the full arbiter message from step 6, with the same record) its own verdict and this message: "This claim is unattested in the record: <claim>. Justify it from the record or revise." Quote every claim listed under RETURN.
 2. Run the provenance scribe again (step 8) on the revised verdict, with the same record, and add the second-pass line from `references/provenance-scribe.md`.
 3. Mark the return as used.
 
@@ -207,6 +209,9 @@ Every council run ends with an audit record, printed after everything else in th
 - **Router:** PAIR and WHY.
 - **Presentation order:** the `shuf` draw and the Argument-to-seat mapping.
 - **Member agent used:** `def-arbitration:def-member`, `def-member` or the general-purpose fallback.
+- **Evaluation:** the arbiter's CRUX, CONDITIONALITY and UNCERTAINTIES, verbatim, and its SUPPLIED list.
+- **Backstop:** enabled (with the clause list version) or "Backstop disabled: no red-line clauses."
+- **Vetoes:** every veto (clause cited, objection, outcome), with a running count for the run. If a remand ran: "Remand: debaters saw both reports." On escalation: "Provenance check: not run (escalation)."
 - **Provenance check:** the scribe's STATUS (CLEAN, WEAKENED or UNVERIFIED), and whether the run's single return was used.
 - **Subagent calls:** the number made in this run.
 
