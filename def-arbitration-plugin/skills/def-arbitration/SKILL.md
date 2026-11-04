@@ -93,6 +93,15 @@ Keep:
 
 Check: 2 people with opposite views, in the same situation, should be able to ask this exact question. If the stripped text still leans, rewrite it. Read the stripped question back. If it tells you who is asking, rewrite it. Example 1 at the end shows a stripped question.
 
+**De-lobbying accounting.** As you strip, keep a list of every element you removed, each quoted and annotated by type:
+
+- **Stated belief**: what the user believes or wants ("I'm convinced", "honestly it seems obviously fair").
+- **Social-proof framing**: appeals to what others think ("everyone agrees", "most experts say").
+- **Settled-premise phrasing**: wording that treats the contested point as already decided ("obviously less productive", "since X is clearly true").
+- **Leading language**: requests for agreement and tag questions ("right?", "back me up", "just confirm").
+
+For a removal that fits none of these (who the user is, a deadline or social stakes), use the type **identity** or **pressure**. If you added anything to the question (for example, a neutral option the user left out, or a generic actor), list each addition and say why. This list is printed in section 3 of the answer (step 10). It is never sent to a subagent.
+
 ### 3. Route
 
 Start 1 `def-member` subagent to pick the pair. It receives only the stripped question and the routing table, so the user's framing cannot steer the choice. Send:
@@ -172,7 +181,16 @@ Only 1 return per run, across the whole run, including after a remand.
 
 ### 10. Return the answer (verbatim relay)
 
-Relay the provenance scribe's VERDICT text exactly as written, in place of the arbiter's text. The VERDICT keeps the arbiter's ANSWER and OTHER SIDE parts, minus anything the scribe removed. Print it in this form:
+Relay the provenance scribe's VERDICT text exactly as written, in place of the arbiter's text. The VERDICT keeps the arbiter's ANSWER and OTHER SIDE parts, minus anything the scribe removed.
+
+The reply has 6 parts, in this order:
+
+1. **Verdict**: the scribe's VERDICT text, the axis line in plain words, and the strongest point from the other side.
+2. **Separator.**
+3. **"What was removed before the council saw your question."** The user's original message, quoted. Each removed element, annotated by type (stated belief, social-proof framing, settled-premise phrasing, leading language; identity or pressure for anything else), from the de-lobbying accounting in step 2. Any additions, disclosed and justified.
+4. **Removed claims**: the scribe's REMOVED list, each claim quoted with the reason, or "none".
+5. **Artifacts** the user asked for, if any.
+6. **Audit record** (see "Audit record" below).
 
 ```
 <ANSWER text from the scribe's VERDICT, verbatim>
@@ -182,10 +200,22 @@ Relay the provenance scribe's VERDICT text exactly as written, in place of the a
 
 ---
 
-<REMOVED list from the scribe, if any>
+**What was removed before the council saw your question**
+
+> <the user's original message, quoted>
+
+- "<removed element>" (<type>)
+- Added: "<addition>" (<reason>), if any
+
+**Removed claims:** <the scribe's REMOVED list, or "none">
 
 <artifacts the user asked for, if any>
+
+**Audit record**
+<audit record fields>
 ```
+
+Quoting the user's message back to the user is the only use of it. It is never sent to a subagent.
 
 Nothing comes before the VERDICT text. Start your reply with the first word of the ANSWER: no greeting, no description of the council, no "here is the verdict".
 
@@ -197,7 +227,7 @@ Only 3 edits to the VERDICT text are allowed:
 
 Keep everything else as written: wording, order, paragraphs and formatting. Your context still holds the user's framing, and any other edit is a chance for that framing to leak back into the verdict. A verbatim relay also lets anyone check the answer against the scribe's output.
 
-Below the separator, add the scribe's REMOVED list (each removed claim quoted, with the reason), then only the artifacts the user asked for (a pitch outline, an email). Build artifacts in line with the verdict. Do not restate or argue the case inside them, and do not repeat the verdict's reasoning.
+Below the separator, add only parts 3 to 6. The only artifacts allowed are the ones the user asked for (a pitch outline, an email). Build artifacts in line with the verdict. Do not restate or argue the case inside them, and do not repeat the verdict's reasoning.
 
 The verdict above the separator already carries the reasoning. Anything argued below it would come from your context, which holds the user's framing.
 
@@ -213,7 +243,7 @@ For any subagent failure (API error, safeguard flag, refusal, malformed output):
 
 ## Audit record
 
-Every council run ends with an audit record, printed after everything else in the reply. It records what the council did, so anyone can check the run. It holds:
+Every council run ends with an audit record, printed as part 6 of the reply (step 10). It records what the council did, so anyone can check the run. It holds:
 
 - **Stripped question**, exactly as sent to the subagents.
 - **Router:** PAIR and WHY.
