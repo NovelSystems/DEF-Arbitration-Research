@@ -308,9 +308,7 @@ No v0.2 eval, council or subagent has been run. Every item below is written only
 | `diag-pension-divestment-ancifer` (needs a harness that forces the pair) | WRITTEN, NOT RUN |
 | `diag-remote-work-loaded-framing` | WRITTEN, NOT RUN |
 | `diag-led-streetlights-routing` | WRITTEN, NOT RUN |
-| `diag-dual-use-failure-ladder` (question not yet written) | DRAFT, needs Sam's approval |
 | `LABEL-SWAP.md` | WRITTEN, NOT RUN |
 | `POLE-FIDELITY.md` (Angel case) | WRITTEN, NOT RUN |
-| `POLE-FIDELITY.md` (other 7 seats) | DRAFT, needs Sam's approval |
 | `FAILURE-LADDER.md` | WRITTEN, NOT RUN |
 | `COST-TEST-PLAN.md` | WRITTEN, NOT RUN |

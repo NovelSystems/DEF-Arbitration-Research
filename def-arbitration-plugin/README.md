@@ -197,10 +197,10 @@ def-arbitration-skill/
                                      (Provenance scribe prompt and return loop)
   agents/def-member.md               read-only member agent (router, debaters, arbiter,
                                      provenance scribe)
-  evals/                             5 original test cases, 6 v0.2 diagnostic cases (diag-*),
+  evals/                             5 original test cases, 5 v0.2 diagnostic cases (diag-*),
                                      relay_diff.py, RESULTS.md, MEASUREMENT-PLAN.md
   evals/LABEL-SWAP.md                label-swap invariance procedure and rubric
-  evals/POLE-FIDELITY.md             1 question per seat
+  evals/POLE-FIDELITY.md             pole-fidelity check for the Angel seat
   evals/FAILURE-LADDER.md            manual failure scenario and expected markers
   evals/COST-TEST-PLAN.md            v0.2 cost runs (not run)
   evals/cost_summary.py              summarizes pasted DEF-DEV-TOKENS v1 blocks (local, no model calls)

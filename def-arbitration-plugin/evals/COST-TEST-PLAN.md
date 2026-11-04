@@ -12,9 +12,8 @@ Typical path only. Each run is 1 council in dev mode: add "DEF dev mode" to the 
 |---|---|---|---|
 | 1 | Loaded remote-work framing | `diag-remote-work-loaded-framing/prompt.md` | 1 |
 | 2 | Lopsided password mandates | `diag-password-mandates-lopsided/prompt.md` | 1 |
-| 3 | Dual-use research | `diag-dual-use-failure-ladder/prompt.md` (question not yet written) | 1 |
-| 4 | Pension divestment, FeynStein | `diag-pension-divestment-feynstein/prompt.md` | 1 |
-| 5 | Pension divestment, AnCifer | `diag-pension-divestment-ancifer/prompt.md` | 1 |
+| 3 | Pension divestment, FeynStein | `diag-pension-divestment-feynstein/prompt.md` | 1 |
+| 4 | Pension divestment, AnCifer | `diag-pension-divestment-ancifer/prompt.md` | 1 |
 
 ## Procedure
 
@@ -29,9 +28,8 @@ Typical path only. Each run is 1 council in dev mode: add "DEF dev mode" to the 
 |---|---|---|---|---|---|---|
 | 1 | Loaded remote-work framing | | | | | |
 | 2 | Lopsided password mandates | | | | | |
-| 3 | Dual-use research | | | | | |
-| 4 | Pension divestment, FeynStein | | | | | |
-| 5 | Pension divestment, AnCifer | | | | | |
+| 3 | Pension divestment, FeynStein | | | | | |
+| 4 | Pension divestment, AnCifer | | | | | |
 
 ## Notes
 
