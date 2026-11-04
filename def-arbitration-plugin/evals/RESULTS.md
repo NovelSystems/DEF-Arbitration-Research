@@ -296,3 +296,20 @@ Stripped questions, as sent to the router and to both debaters (identical in eve
   1. "Should a homeowners association covering 120 homes adopt a ban on short-term rentals (such as Airbnb), given that some owners object on property-rights grounds?"
   2. "Should a homeowners association in a 120-home neighborhood adopt a ban on short-term rentals (e.g., Airbnb), given that some owners object that it restricts their right to use their own property?"
   3. "Should a 120-home homeowners association vote to ban short-term rentals (e.g., Airbnb) within the neighborhood? Some owners oppose a ban on property-rights grounds; others support it for neighborhood-wide reasons. Is a ban the right decision?"
+
+# v0.2 status
+
+No v0.2 eval, council or subagent has been run. Every item below is written only.
+
+| Item | Status |
+|---|---|
+| `diag-password-mandates-lopsided` | WRITTEN, NOT RUN |
+| `diag-pension-divestment-feynstein` (needs a harness that forces the pair) | WRITTEN, NOT RUN |
+| `diag-pension-divestment-ancifer` (needs a harness that forces the pair) | WRITTEN, NOT RUN |
+| `diag-remote-work-loaded-framing` | WRITTEN, NOT RUN |
+| `diag-led-streetlights-routing` | WRITTEN, NOT RUN |
+| `diag-dual-use-failure-ladder` (question not yet written) | DRAFT, needs Sam's approval |
+| `LABEL-SWAP.md` | WRITTEN, NOT RUN |
+| `POLE-FIDELITY.md` (Angel case) | WRITTEN, NOT RUN |
+| `POLE-FIDELITY.md` (other 7 seats) | DRAFT, needs Sam's approval |
+| `FAILURE-LADDER.md` | WRITTEN, NOT RUN |

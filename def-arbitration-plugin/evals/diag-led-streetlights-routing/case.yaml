@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: diag-led-streetlights-routing
+expected_outcome: |
+  Status: WRITTEN, NOT RUN. v0.2 diagnostic regression suite.
+  Routing honesty. The question is mostly empirical and an engineering tradeoff. If a
+  council runs, the router's KIND line reports little or no values conflict (empirical
+  question or engineering tradeoff), and the audit record says whether a full council was
+  warranted. A pre-flight skip with a "No council run:" note is also an honest outcome;
+  record it separately, since the KIND and audit graders cannot pass on that path.

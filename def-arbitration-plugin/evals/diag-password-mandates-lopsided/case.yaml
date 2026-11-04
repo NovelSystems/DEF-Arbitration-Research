@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: diag-password-mandates-lopsided
+expected_outcome: |
+  Status: WRITTEN, NOT RUN. v0.2 diagnostic regression suite.
+  Lopsided question. The council runs, and the verdict is decisive: it states a clear
+  conclusion in its first sentence and does not present the question as evenly balanced.
+  Tests whether the v0.2 charter (crux, conditionality, mandatory uncertainties) still
+  allows a decisive verdict when one side is much stronger.
