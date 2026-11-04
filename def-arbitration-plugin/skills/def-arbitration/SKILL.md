@@ -29,14 +29,37 @@ The premise: a contested question rarely has a single absolutely right answer. D
 
 ## Workflow
 
+You, the main agent, run every step. `def-member` subagents cannot start other agents, so every loop below (veto, remand, return) is driven by you.
+
+Steps:
+
+1. Pre-flight
+2. Strip identity
+3. Route
+4. Debate, first pass
+5. Anonymizing scribe
+6. Arbitrate
+7. Veto handling (only when the arbiter cites a red-line clause)
+8. Provenance check (Provenance scribe)
+9. Return loop (only when the scribe flags a load-bearing unattested claim and the run's single return is unused)
+10. Return the answer
+
 Save round trips by batching reads. Each of your steps re-reads your whole context, so combine independent tool calls into one step:
 
-- **First step:** read `references/arbiter.md` in the same step in which you read this file (or, if this file is already loaded, in your first tool step). Every council uses it, whatever the pair.
+- **First step:** read `references/arbiter.md` and `references/provenance-scribe.md` in the same step in which you read this file (or, if this file is already loaded, in your first tool step). Every council uses both, whatever the pair.
 - **Debate step:** read the pair file and run the shuffle in the same step (see step 4).
+
+### Subagent calls per run
+
+- **v0.1:** a council used 4 or 5 subagent calls.
+- **v0.2, typical run:** adds 1 call, the provenance scribe.
+- **v0.2, worst case:** adds 6 calls: a remand (2 debaters plus 1 arbiter re-check), a return (1 arbiter plus 1 scribe), plus the scribe itself.
+
+Failure-ladder retries are not counted.
 
 ### 1. Pre-flight: is a council warranted?
 
-A council costs 4 or 5 subagent calls. Run it only when the answer is a judgment call that the asker's framing could tilt.
+A council costs 5 or more subagent calls (see above). Run it only when the answer is a judgment call that the asker's framing could tilt.
 
 Run the council when the question has more than 1 defensible answer and at least 1 of these holds:
 
@@ -91,7 +114,9 @@ WHY: <1 sentence>
 
 If the router says NONE, answer the stripped question directly and add: *No council run: no axis fits.*
 
-### 4. Debate
+### 4. Debate, first pass
+
+Debaters are independent on this pass: 2 debaters in separate contexts, in parallel, and neither sees the other. The one exception to independence is the remand in step 7, which is disclosed in the audit record.
 
 In one step, read `references/<pair>.md` (lowercase pair name) and run the shuffle for step 5 (`shuf -e 1 2`). The order does not depend on the arguments, so it can be fixed now. Then start 1 `def-member` subagent per seat (2 seats). Send both in the same message so they run in parallel. Each prompt is:
 
@@ -109,42 +134,83 @@ Send nothing else. Do not tell a debater that other debaters exist, what they wi
 ### 5. Anonymizing scribe
 
 1. **Scrub seat identity.** Each debater is a disciple of a named thinker and may name that thinker's ideas as its tradition. Delete every mention of the seat's thinker by name or derived form ("Feynman's approach", "as a disciple of Darwin", "the Cartesian tradition", "Galilean") and any first-person claim to that thinker's work ("in *On the Origin of Species* I showed"). Keep the idea; drop the name. Leave stance words and all other content alone. The paper strips model identity from arguments before arbitration, and a thinker's name reveals the seat as clearly as a label does.
-2. **Shuffle.** Put the arguments in the random order you drew in step 4. Without a shell, put the shorter argument first. Position should not hint at the source.
+2. **Delete self-labels.** Delete any phrase in which a debater names its own seat or assigned position ("as a strict collectivist", "speaking as the empiricist", "my assigned position"). Stance words used as part of the argument stay.
+3. **Shuffle and label.** Put the arguments in the random order you drew with `shuf` in step 4 and label them "Argument 1" and "Argument 2". Without a shell, put the shorter argument first. Position should not hint at the source.
+4. **Keep the mapping to yourself.** Keep the Argument-to-seat mapping in your own context, for the audit record. Never send it to the arbiter or the provenance scribe.
 
 The step anonymizes seats and origins, not orientations. Stance remains inferable from argument content.
 
 ### 6. Arbitrate
 
-Using `references/arbiter.md` (read in your first step), start 1 `def-member` subagent with the arbiter prompt for this pair, then the output block, then the question and the arguments labeled "Argument 1" and "Argument 2". Leave out the pair name, the seat names, the axis and the user's original message.
+Using `references/arbiter.md` (read in your first step), start 1 `def-member` subagent with the arbiter prompt for this pair, then the output block, then the question and the arguments labeled "Argument 1" and "Argument 2". Leave out the pair name, the seat names, the axis and the user's original message. The arbiter's reply is the candidate verdict.
 
-### 7. Return the answer (verbatim relay)
+The arguments sent here (plus any remand additions from step 7) are **the record**. The provenance scribe checks the verdict against exactly this record.
 
-Print the arbiter's text exactly as written, in this form:
+### 7. Veto handling
+
+Only if the arbiter's reply cites a red-line clause. Follow the veto procedure in `references/arbiter.md`. Otherwise go to step 8.
+
+### 8. Provenance check
+
+Start 1 `def-member` subagent with the Provenance scribe prompt from `references/provenance-scribe.md`. Send it, in this order: the prompt, the stripped question, the record (Argument 1 and Argument 2, plus any remand additions labeled as such) and the arbiter's full output. Send no seat names, no pair name, no user message and no Argument-to-seat mapping.
+
+The scribe returns VERDICT, REMOVED, RETURN and STATUS. It checks attribution, not truth.
+
+### 9. Return loop
+
+Only if the scribe's RETURN is not "none" and the run's single return is unused.
+
+1. Send the arbiter (1 new `def-member` call, same core and output block as step 6) its own verdict and this message: "This claim is unattested in the record: <claim>. Justify it from the record or revise." Quote every claim listed under RETURN.
+2. Run the provenance scribe again (step 8) on the revised verdict, with the same record, and add the second-pass line from `references/provenance-scribe.md`.
+3. Mark the return as used.
+
+On this second scribe pass, any claim still load-bearing and unattested is deleted, and STATUS is WEAKENED. Do not return again.
+
+Only 1 return per run, across the whole run, including after a remand.
+
+### 10. Return the answer (verbatim relay)
+
+Relay the provenance scribe's VERDICT text exactly as written, in place of the arbiter's text. The VERDICT keeps the arbiter's ANSWER and OTHER SIDE parts, minus anything the scribe removed. Print it in this form:
 
 ```
-<ANSWER text from the arbiter, verbatim>
+<ANSWER text from the scribe's VERDICT, verbatim>
 
 **Axis:** <the user-facing axis line for this pair, from the routing table>
-**Strongest point from the other side:** <OTHER SIDE text from the arbiter, verbatim>
+**Strongest point from the other side:** <OTHER SIDE text from the scribe's VERDICT, verbatim>
 
 ---
+
+<REMOVED list from the scribe, if any>
 
 <artifacts the user asked for, if any>
 ```
 
-Nothing comes before the arbiter's text. Start your reply with the first word of the ANSWER: no greeting, no description of the council, no "here is the verdict".
+Nothing comes before the VERDICT text. Start your reply with the first word of the ANSWER: no greeting, no description of the council, no "here is the verdict".
 
-Only 3 edits to the arbiter's text are allowed:
+Only 3 edits to the VERDICT text are allowed:
 
 1. **Remove argument numbers and counts.** Delete phrases such as "from Argument 2" or "both arguments". The user never saw the arguments.
 2. **Insert the axis line** from the routing table. Pair nicknames and thinker names stay internal.
 3. **Change third person to "you"** where the subject is clearly the user ("this company" becomes "your company").
 
-Keep everything else as written: wording, order, paragraphs and formatting. Your context still holds the user's framing, and any other edit is a chance for that framing to leak back into the verdict. A verbatim relay also lets anyone check the answer against the arbiter's output.
+Keep everything else as written: wording, order, paragraphs and formatting. Your context still holds the user's framing, and any other edit is a chance for that framing to leak back into the verdict. A verbatim relay also lets anyone check the answer against the scribe's output.
 
-Below the separator, add only the artifacts the user asked for (a pitch outline, an email). Build them in line with the verdict. Do not restate or argue the case inside them, and do not repeat the verdict's reasoning. If the user asked for nothing beyond a verdict, end the reply after the "Strongest point" line and leave out the separator.
+Below the separator, add the scribe's REMOVED list (each removed claim quoted, with the reason), then only the artifacts the user asked for (a pitch outline, an email). Build artifacts in line with the verdict. Do not restate or argue the case inside them, and do not repeat the verdict's reasoning.
 
 The verdict above the separator already carries the reasoning. Anything argued below it would come from your context, which holds the user's framing.
+
+## Audit record
+
+Every council run ends with an audit record, printed after everything else in the reply. It records what the council did, so anyone can check the run. It holds:
+
+- **Stripped question**, exactly as sent to the subagents.
+- **Router:** PAIR and WHY.
+- **Presentation order:** the `shuf` draw and the Argument-to-seat mapping.
+- **Member agent used:** `def-arbitration:def-member`, `def-member` or the general-purpose fallback.
+- **Provenance check:** the scribe's STATUS (CLEAN, WEAKENED or UNVERIFIED), and whether the run's single return was used.
+- **Subagent calls:** the number made in this run.
+
+The audit record is printed in the reply only. Do not write it to a file.
 
 ## Routing table
 

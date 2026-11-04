@@ -1,6 +1,6 @@
 ---
 name: def-member
-description: Read-only member for the def-arbitration skill. It takes 1 task (route a question, argue from 1 assigned position, or arbitrate) and sees nothing outside that task. Dispatch it only from the def-arbitration skill.
+description: Read-only member for the def-arbitration skill. It takes 1 task (route a question, argue from 1 assigned position, arbitrate, or attest a verdict against a record) and sees nothing outside that task. Dispatch it only from the def-arbitration skill.
 tools: Read, Grep, Glob
 ---
 

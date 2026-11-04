@@ -18,6 +18,10 @@ Author: Sam Ryan, Novel Systems Engineering LLC.
 6. **Arbitration.** A separate subagent receives the anonymized arguments and the stripped question. It never sees the user's message or the seat labels.
 7. **Answer.** The verdict, the axis used and the strongest point from the side that did not prevail. The axis appears in plain words, for example "Axis: Time horizon (short-term pragmatist vs long-term principled)". Pair nicknames and thinker names stay internal. The main agent relays the arbiter's text verbatim (3 mechanical edits allowed), with nothing before it. After a separator it may add only the artifacts the user asked for, such as an email or a pitch outline.
 
+### Subagent calls
+
+The v0.1 council used 4 or 5 subagent calls. A typical v0.2 run adds 1 call (the Provenance scribe). The worst case adds 6: a remand (2 debaters plus 1 arbiter re-check), a return (1 arbiter plus 1 scribe), plus the scribe itself. Failure-ladder retries are not counted.
+
 ## Pairs
 
 | Pair | Seats | Axis |
@@ -173,7 +177,7 @@ def-arbitration-skill/
   .claude-plugin/marketplace.json    marketplace listing this folder (source "./")
   .claude-plugin/icon.png            listing icon (1254 x 1254 PNG)
   skills/def-arbitration/SKILL.md    workflow, routing table, examples
-  skills/def-arbitration/references/ 1 file per pair, plus arbiter.md
+  skills/def-arbitration/references/ 1 file per pair, plus arbiter.md and provenance-scribe.md
   agents/def-member.md               read-only member agent (router, debaters, arbiter)
   evals/                             5 test cases, relay_diff.py, RESULTS.md, MEASUREMENT-PLAN.md
   README.md
