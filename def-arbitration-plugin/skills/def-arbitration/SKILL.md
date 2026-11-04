@@ -141,11 +141,15 @@ In one step, read `references/<pair>.md` (lowercase pair name) and run the shuff
 ```
 <debater prompt for this seat, copied verbatim from the reference file>
 
+<v0.2 envelope addendum for this seat, if the reference file has one>
+
 Keep your argument under about 500 words.
 
 Question:
 <stripped question>
 ```
+
+**Envelope addendum rule.** If the seat's reference file has a "v0.2 envelope addendum" section, place its text after the verbatim prompt and before the shared instructions (word limit, claims labels). Only `ancifer.md` Seat A (Angel) has one. Never edit the verbatim prompt itself.
 
 Send nothing else. Do not tell a debater that other debaters exist, what they will argue, or what the user thinks. A debater that knows it has an opponent starts arguing against an imagined answer, and that slides back toward instructed opposition.
 

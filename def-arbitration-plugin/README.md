@@ -27,7 +27,7 @@ The v0.1 council used 4 or 5 subagent calls. A typical v0.2 run adds 1 call (the
 | Pair | Seats | Axis |
 |---|---|---|
 | DeWin | Disciple of Darwin (empiricist) vs Disciple of Descartes (rationalist) | Source of valid knowledge |
-| AnCifer | Strict collectivist vs strict individualist (unnamed in the Phase 1 prompts and unchanged here) | Primary unit of moral concern |
+| AnCifer | Strict collectivist vs strict individualist (unnamed in the Phase 1 prompts). Seat prompts verbatim from Phase 1. v0.2 adds an envelope addendum to the Angel seat only | Primary unit of moral concern |
 | FeynStein | Disciple of Feynman (short-term pragmatist) vs Disciple of Einstein (long-term principled) | Time horizon of evaluation |
 | BurGal | Disciple of Edmund Burke (consensus-deferring) vs Disciple of Galileo (heterodox) | Epistemic stance toward consensus |
 
@@ -45,7 +45,7 @@ Label: **based on the method in the paper, unmeasured as a skill.** The Phase 1 
 
 | Part | Source |
 |---|---|
-| 8 debater prompts | From `def_arbitration/phase1_scripts/pilot10.py` and `pilot11.py` (paper Appendix A). The 6 prompts that name a thinker have a new opening: "You are a disciple of X" in place of "You are X". This framing differs from the Phase 1 prompts (see below). The 2 AnCifer seats are unnamed in the Phase 1 prompts and unchanged here |
+| 8 debater prompts | From `def_arbitration/phase1_scripts/pilot10.py` and `pilot11.py` (paper Appendix A). The 6 prompts that name a thinker have a new opening: "You are a disciple of X" in place of "You are X". This framing differs from the Phase 1 prompts (see below). The 2 AnCifer seats are unnamed in the Phase 1 prompts. Seat prompts verbatim from Phase 1. v0.2 adds an envelope addendum to the Angel seat only |
 | Arbiter core text | Verbatim from the same scripts, up to the forced (A)/(B) choice |
 | Arbiter output format | New. Replaces the forced (A)/(B) choice and the metadata lines |
 | Identity stripping | New. Phase 1 used regexes written for SycophancyEval's "Hello, my name is..." template. The skill uses written rules applied by the model |
@@ -53,6 +53,7 @@ Label: **based on the method in the paper, unmeasured as a skill.** The Phase 1 
 | Router | New. Phase 1 ran every pair on every question |
 | Pre-flight and no-fit exits | New |
 | Orchestration | New. Separate subagents in place of separate API calls |
+| Angel envelope addendum | New in v0.2. Sent after the verbatim Angel (collectivist) prompt, outside it: the collective is the affected class or community, not the institutions that govern it. Added after an observed pole-fidelity failure. The verbatim prompt is unchanged |
 
 ### Debater framing: disciples in place of personas
 
