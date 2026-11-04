@@ -116,12 +116,21 @@ If the question spans more than one axis, pick the one pair for the axis the dec
 Question:
 <stripped question>
 
-Reply with exactly 2 lines:
+Reply with exactly 6 lines, in this order:
 PAIR: <DeWin | AnCifer | FeynStein | BurGal | NONE>
 WHY: <1 sentence>
+FIT_1: <the chosen pair, or NONE> | <strong | partial | forced> | <1 line on how well its axis fits>
+FIT_2: <the runner-up pair> | <strong | partial | forced> | <1 line on why it was rejected>
+KIND: <values conflict | empirical question | engineering tradeoff | mix>
+NO_FIT_NOTE: <if PAIR is NONE, 1 line stating why no pair fits; otherwise "none">
 ```
 
-If the router says NONE, answer the stripped question directly and add: *No council run: no axis fits.*
+**Parse the reply in this order.**
+
+1. PAIR and WHY, first. They decide the route exactly as before.
+2. FIT_1, FIT_2, KIND and NO_FIT_NOTE. They change nothing about the route. Copy them into the audit record. If one is missing, record it as "not reported by the router". A missing instrumentation line is not a failure and does not trigger a retry. A missing or unreadable PAIR line is a failure (see "Failure ladder").
+
+If the router says NONE, this is the decline pathway: answer the stripped question directly and add the 1-line note: *No council run: no axis fits.*
 
 ### 4. Debate, first pass
 
@@ -246,7 +255,8 @@ For any subagent failure (API error, safeguard flag, refusal, malformed output):
 Every council run ends with an audit record, printed as part 6 of the reply (step 10). It records what the council did, so anyone can check the run. It holds:
 
 - **Stripped question**, exactly as sent to the subagents.
-- **Router:** PAIR and WHY.
+- **Router:** PAIR, WHY, FIT_1, FIT_2, KIND and NO_FIT_NOTE, as the router wrote them.
+- **Council warranted:** when KIND is "empirical question" or "engineering tradeoff" (little or no values conflict), state in 1 line whether a full council was warranted and why. Otherwise write "yes (values conflict)" or "yes (mix)".
 - **Presentation order:** the `shuf` draw and the Argument-to-seat mapping.
 - **Member agent used:** `def-arbitration:def-member`, `def-member` or the general-purpose fallback.
 - **Evaluation:** the arbiter's CRUX, CONDITIONALITY and UNCERTAINTIES, verbatim, and its SUPPLIED list.
