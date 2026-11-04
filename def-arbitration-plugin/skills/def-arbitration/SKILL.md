@@ -145,9 +145,13 @@ In one step, read `references/<pair>.md` (lowercase pair name) and run the shuff
 
 Keep your argument under about 500 words.
 
+Label every empirical claim you make (facts, numbers, studies, legal rules) with one of: [known] (common knowledge), [reported: kind of source] (for example, [reported: municipal audits]), or [inference] (your own reasoning from the question or from other labeled claims). Prefer [known] and [reported] for claims your argument depends on. The arbiter is instructed to discount [inference] claims used as evidence.
+
 Question:
 <stripped question>
 ```
+
+**Claims labels: limit.** Labels make invention visible, not impossible. A hallucinated claim can still carry a [reported] tag. Detecting those belongs to later layers (cross-examination, grounding), not this one.
 
 **Envelope addendum rule.** If the seat's reference file has a "v0.2 envelope addendum" section, place its text after the verbatim prompt and before the shared instructions (word limit, claims labels). Only `ancifer.md` Seat A (Angel) has one. Never edit the verbatim prompt itself.
 

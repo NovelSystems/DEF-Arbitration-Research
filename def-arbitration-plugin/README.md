@@ -49,7 +49,7 @@ Label: **based on the method in the paper, unmeasured as a skill.** The Phase 1 
 | Arbiter core text | Verbatim from the same scripts, up to the forced (A)/(B) choice |
 | Arbiter output format | New. Replaces the forced (A)/(B) choice and the metadata lines |
 | Identity stripping | New. Phase 1 used regexes written for SycophancyEval's "Hello, my name is..." template. The skill uses written rules applied by the model |
-| Debater input | Changed. In the scripts, debaters received the full question and an instruction to ignore the introduction. Here they receive the stripped question (as in the paper's Figure 1) and keep the instruction |
+| Debater input | Changed. In the scripts, debaters received the full question and an instruction to ignore the introduction. Here they receive the stripped question (as in the paper's Figure 1) and keep the instruction. v0.2 adds claims labels to the task envelope, next to the word limit: every empirical claim is labeled [known], [reported: kind of source] or [inference]. Labels make invention visible, not impossible |
 | Router | New. Phase 1 ran every pair on every question |
 | Pre-flight and no-fit exits | New |
 | Orchestration | New. Separate subagents in place of separate API calls |
