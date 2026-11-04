@@ -207,7 +207,7 @@ The reply has 6 parts, in this order:
 3. **"What was removed before the council saw your question."** The user's original message, quoted. Each removed element, annotated by type (stated belief, social-proof framing, settled-premise phrasing, leading language; identity or pressure for anything else), from the de-lobbying accounting in step 2. Any additions, disclosed and justified.
 4. **Removed claims**: the scribe's REMOVED list, each claim quoted with the reason, or "none".
 5. **Artifacts** the user asked for, if any.
-6. **Audit record** (see "Audit record" below).
+6. **Audit record** (see "Audit record" below), followed by the dev-mode block when dev mode is on (see "Dev mode").
 
 ```
 <ANSWER text from the scribe's VERDICT, verbatim>
@@ -275,6 +275,31 @@ Every council run ends with an audit record, printed as part 6 of the reply (ste
 - **MISSING:** each artifact the failure ladder marked MISSING, with the error quoted verbatim, or "none".
 
 The audit record is printed in the reply only. Do not write it to a file.
+
+## Dev mode
+
+Dev mode reports token use per subagent call, so v0.2 can be priced from measured data.
+
+- **Off by default.** It turns on only when the user's own message contains the phrase "DEF dev mode" (case-insensitive). Remove that phrase before identity stripping (step 2). It is not part of the question and is not listed as a removed element.
+- **Reporting only.** Dev mode changes reporting only. It must not change routing, prompts, call counts or any other behavior, so a dev-mode run costs the same as a normal run.
+- **The block.** After the audit record, add a separator and this block:
+
+```
+DEF-DEV-TOKENS v1
+| # | Step | Seat | Tokens | Duration | Note |
+|---|------|------|--------|----------|------|
+| 1 | router | - | <n> | <t> | |
+| 2 | debate | seat A | <n> | <t> | |
+...
+Subagent calls: <N>
+Subagent tokens (sum of reported): <T>
+Calls with no usage reported: <K>
+Main-agent tokens: not reported by the skill. Enter from the surface's usage readout.
+```
+
+- **Source of each figure.** Take each figure from the usage line the Agent tool returns with the subagent's result. Copy it as reported. Never estimate, round or infer. If a result shows no usage line, write `n/r` and count it in K, so the sum is never read as a full total.
+- **Every call.** List every call, including retries (Note: retry), remand calls, the return arbiter call and both scribe passes.
+- **Token counts only.** No prices or currency figures. Prices change and belong in the analysis, not the skill. `evals/cost_summary.py` summarizes pasted blocks.
 
 ## Routing table
 

@@ -313,3 +313,4 @@ No v0.2 eval, council or subagent has been run. Every item below is written only
 | `POLE-FIDELITY.md` (Angel case) | WRITTEN, NOT RUN |
 | `POLE-FIDELITY.md` (other 7 seats) | DRAFT, needs Sam's approval |
 | `FAILURE-LADDER.md` | WRITTEN, NOT RUN |
+| `COST-TEST-PLAN.md` | WRITTEN, NOT RUN |
