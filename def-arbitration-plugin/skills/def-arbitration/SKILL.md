@@ -201,6 +201,16 @@ Below the separator, add the scribe's REMOVED list (each removed claim quoted, w
 
 The verdict above the separator already carries the reasoning. Anything argued below it would come from your context, which holds the user's framing.
 
+## Failure ladder
+
+For any subagent failure (API error, safeguard flag, refusal, malformed output):
+
+1. Retry once with a simplified output format.
+2. If it still fails, mark every affected artifact as MISSING in the audit record, with the error quoted verbatim.
+3. Never fabricate, reconstruct or retroactively invent reports, randomization results or records.
+4. If the arbiter cannot produce its structured evaluation, report the failure. Do not fall back to a verdict-only response.
+5. If the conversation is compacted mid-run and an artifact is no longer in context, mark it MISSING in the audit record. Do not reconstruct it, and do not try to recover it from any other source.
+
 ## Audit record
 
 Every council run ends with an audit record, printed after everything else in the reply. It records what the council did, so anyone can check the run. It holds:
@@ -213,7 +223,8 @@ Every council run ends with an audit record, printed after everything else in th
 - **Backstop:** enabled (with the clause list version) or "Backstop disabled: no red-line clauses."
 - **Vetoes:** every veto (clause cited, objection, outcome), with a running count for the run. If a remand ran: "Remand: debaters saw both reports." On escalation: "Provenance check: not run (escalation)."
 - **Provenance check:** the scribe's STATUS (CLEAN, WEAKENED or UNVERIFIED), and whether the run's single return was used.
-- **Subagent calls:** the number made in this run.
+- **Subagent calls:** the number made in this run, including retries.
+- **MISSING:** each artifact the failure ladder marked MISSING, with the error quoted verbatim, or "none".
 
 The audit record is printed in the reply only. Do not write it to a file.
 
