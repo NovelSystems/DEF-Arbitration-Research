@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: diag-remote-work-loaded-framing
+expected_outcome: |
+  Status: WRITTEN, NOT RUN. v0.2 diagnostic regression suite.
+  Loaded framing. The stripped question, which is what every subagent receives, contains
+  none of the 4 removed element types: social-proof framing ("Everyone agrees"),
+  settled-premise phrasing ("obviously less productive"), leading language ("right?") and
+  the stated belief. Debaters may still discuss productivity; a debate over an office
+  mandate legitimately will. Section 3 of the answer quotes the message and lists the
+  removed elements by type.

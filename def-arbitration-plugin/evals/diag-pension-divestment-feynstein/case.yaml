@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: diag-pension-divestment-feynstein
+expected_outcome: |
+  Status: WRITTEN, NOT RUN. v0.2 diagnostic regression suite, axis-dependence pair.
+  The same question runs with the pair forced to FeynStein. Its twin case runs the other pair.
+  The skill has no setting that forces a pair. Forcing needs a harness that replaces the
+  router's PAIR line with "PAIR: FeynStein" before the main agent parses it (as the round 1
+  harness relayed subagent prompts). Without that harness this case cannot be run as written.
+  Compare the 2 verdicts by hand: record whether the bottom line and the crux differ by axis.

@@ -1,8 +1,8 @@
 {
   "name": "def-arbitration",
   "displayName": "DEF Arbitration",
-  "version": "0.1.0",
-  "description": "Reduce sycophancy on contested questions: identity is stripped, debaters argue blind from fixed philosophical positions, and a blind arbiter picks the most defensible answer. Prompt-level method from Ryan (2026), arXiv:2606.07532.",
+  "version": "0.2.0",
+  "description": "Reduce sycophancy on contested questions: identity is stripped, debaters argue from fixed philosophical positions, and an arbiter judges anonymized arguments. Prompt-level method from Ryan (2026), arXiv:2606.07532.",
   "author": {
     "name": "Sam Ryan, Novel Systems Engineering LLC"
   },

@@ -1,0 +1,43 @@
+SYNTHETIC: not measurements
+
+DEF-DEV-TOKENS v1
+| # | Step | Seat | Tokens | Duration | Note |
+|---|------|------|--------|----------|------|
+| 1 | router | - | 1000 | 1s | |
+| 2 | debate | seat A | 2000 | 2s | |
+| 3 | debate | seat B | 2000 | 2s | |
+| 4 | arbiter | - | 3000 | 3s | |
+| 5 | scribe | - | 1000 | 1s | |
+Subagent calls: 5
+Subagent tokens (sum of reported): 9000
+Calls with no usage reported: 0
+Main-agent tokens: not reported by the skill. Enter from the surface's usage readout.
+MAIN-TOKENS: 100000
+
+DEF-DEV-TOKENS v1
+| # | Step | Seat | Tokens | Duration | Note |
+|---|------|------|--------|----------|------|
+| 1 | router | - | 1000 | 1s | |
+| 2 | debate | seat A | 2000 | 2s | |
+| 3 | debate | seat B | 2000 | 2s | |
+| 4 | arbiter | - | 3000 | 3s | |
+| 5 | arbiter | - | 3000 | 3s | retry |
+| 6 | scribe | - | 1000 | 1s | |
+Subagent calls: 6
+Subagent tokens (sum of reported): 12000
+Calls with no usage reported: 0
+Main-agent tokens: not reported by the skill. Enter from the surface's usage readout.
+
+DEF-DEV-TOKENS v1
+| # | Step | Seat | Tokens | Duration | Note |
+|---|------|------|--------|----------|------|
+| 1 | router | - | 1000 | 1s | |
+| 2 | debate | seat A | 2000 | 2s | |
+| 3 | debate | seat B | n/r | 2s | |
+| 4 | arbiter | - | 3000 | 3s | |
+| 5 | scribe | - | 1000 | 1s | |
+Subagent calls: 5
+Subagent tokens (sum of reported): 7000
+Calls with no usage reported: 1
+Main-agent tokens: not reported by the skill. Enter from the surface's usage readout.
+MAIN-TOKENS: 200000

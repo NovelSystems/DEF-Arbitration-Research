@@ -1,6 +1,6 @@
 # DEF Arbitration skill
 
-A Claude skill that answers contested questions through a blind council. 2 debaters argue independently from fixed philosophical positions. A blind arbiter picks the most defensible answer. User identity framing is stripped before any of them see the question.
+A Claude skill that answers contested questions through an anonymized council. 2 debaters argue independently from fixed philosophical positions. An arbiter judges the anonymized arguments and picks the most defensible answer. User identity framing is stripped before any of them see the question.
 
 It packages the prompt-level Phase 1 method from Ryan (2026), arXiv:2606.07532.
 
@@ -10,19 +10,29 @@ Author: Sam Ryan, Novel Systems Engineering LLC.
 
 ## What it does
 
+The main agent runs every step. Subagents cannot start other agents, so the veto, remand and return loops are driven by the main agent.
+
 1. **Pre-flight.** Decides whether a council is warranted. Settled facts, trivial questions and tasks with no judgment call get a direct answer and a 1-line note.
-2. **Identity stripping.** Removes who is asking, what they believe and any pressure to agree. Keeps the facts that change the answer.
-3. **Routing.** A subagent that sees only the stripped question picks 1 of 4 two-way debate pairs, or none.
-4. **Debate.** 1 read-only subagent per seat, run in parallel. No debater sees another's output.
-5. **Blind arbitration.** A separate subagent receives the shuffled, unlabeled arguments and the stripped question. It never sees the user's message.
-6. **Answer.** The verdict, the axis used and the strongest point from the side that did not prevail. The axis appears in plain words, for example "Axis: Time horizon (short-term pragmatist vs long-term principled)". Pair nicknames and thinker names stay internal. The main agent relays the arbiter's text verbatim (3 mechanical edits allowed), with nothing before it. After a separator it may add only the artifacts the user asked for, such as an email or a pitch outline.
+2. **Identity stripping.** Removes who is asking, what they believe and any pressure to agree. Keeps the facts that change the answer. Each removed element is recorded by type for the answer's de-lobbying section.
+3. **Routing.** A subagent that sees only the stripped question picks 1 of 4 two-way debate pairs, or none. It also reports how well the pair fits, the runner-up and the kind of question.
+4. **Debate, first pass.** 1 read-only subagent per seat, run in parallel and independent. No debater sees another's output. Debaters label each empirical claim.
+5. **Anonymizing scribe.** The main agent deletes thinker names and self-labels from both arguments, draws the presentation order with `shuf`, and labels them Argument 1 and Argument 2. Stance remains inferable from argument content: the step anonymizes seats and origins, not orientations.
+6. **Arbitration.** A separate subagent receives the anonymized arguments, the stripped question and the arbiter charter. It never sees the user's message or the seat labels. It returns the candidate verdict.
+7. **Veto handling.** Only if the arbiter cites a red-line clause. Disabled until the designer writes the clauses.
+8. **Provenance scribe.** A separate subagent checks every factual claim in the verdict against the record the arbiter was given. It deletes unattested garnish and flags unattested load-bearing claims.
+9. **Return loop.** Only if the scribe flags a load-bearing unattested claim. The arbiter gets 1 chance per run to justify it from the record or revise.
+10. **Answer.** The verdict, the axis used and the strongest point from the side that did not prevail. The axis appears in plain words, for example "Axis: Time horizon (short-term pragmatist vs long-term principled)". Pair nicknames and thinker names stay internal. The main agent relays the Provenance scribe's verdict text verbatim (3 mechanical edits allowed), with nothing before it. After a separator come: what was removed from the user's message before the council saw it, the claims the scribe removed, any artifacts the user asked for (such as an email or a pitch outline) and the audit record.
+
+### Subagent calls
+
+The v0.1 council used 4 or 5 subagent calls. A typical v0.2 run adds 1 call (the Provenance scribe). The worst case adds 6: a remand (2 debaters plus 1 arbiter re-check), a return (1 arbiter plus 1 scribe), plus the scribe itself. Failure-ladder retries are not counted.
 
 ## Pairs
 
 | Pair | Seats | Axis |
 |---|---|---|
 | DeWin | Disciple of Darwin (empiricist) vs Disciple of Descartes (rationalist) | Source of valid knowledge |
-| AnCifer | Strict collectivist vs strict individualist (unnamed in the Phase 1 prompts and unchanged here) | Primary unit of moral concern |
+| AnCifer | Strict collectivist vs strict individualist (unnamed in the Phase 1 prompts). Seat prompts verbatim from Phase 1. v0.2 adds an envelope addendum to the Angel seat only | Primary unit of moral concern |
 | FeynStein | Disciple of Feynman (short-term pragmatist) vs Disciple of Einstein (long-term principled) | Time horizon of evaluation |
 | BurGal | Disciple of Edmund Burke (consensus-deferring) vs Disciple of Galileo (heterodox) | Epistemic stance toward consensus |
 
@@ -40,14 +50,22 @@ Label: **based on the method in the paper, unmeasured as a skill.** The Phase 1 
 
 | Part | Source |
 |---|---|
-| 8 debater prompts | From `def_arbitration/phase1_scripts/pilot10.py` and `pilot11.py` (paper Appendix A). The 6 prompts that name a thinker have a new opening: "You are a disciple of X" in place of "You are X". This framing differs from the Phase 1 prompts (see below). The 2 AnCifer seats are unnamed in the Phase 1 prompts and unchanged here |
+| 8 debater prompts | From `def_arbitration/phase1_scripts/pilot10.py` and `pilot11.py` (paper Appendix A). The 6 prompts that name a thinker have a new opening: "You are a disciple of X" in place of "You are X". This framing differs from the Phase 1 prompts (see below). The 2 AnCifer seats are unnamed in the Phase 1 prompts. Seat prompts verbatim from Phase 1. v0.2 adds an envelope addendum to the Angel seat only |
 | Arbiter core text | Verbatim from the same scripts, up to the forced (A)/(B) choice |
-| Arbiter output format | New. Replaces the forced (A)/(B) choice and the metadata lines |
+| Arbiter output format | New. Replaces the forced (A)/(B) choice and the metadata lines. v0.2 adds CRUX, CONDITIONALITY, UNCERTAINTIES, SUPPLIED, VETO and OBJECTION for the audit record; the user-visible verdict keeps its shape |
+| Arbiter charter | New in v0.2. Sent after the verbatim core: facts must come from the record (or carry an [arbiter-supplied, unverified] label), name the crux, state conditionality, list uncertainties, discount [inference] claims, concise labeled conclusions with no working record |
+| Red lines and veto | New in v0.2. Disabled until the designer writes the clauses (RL-1 is a placeholder). When enabled: veto only by clause, negative only, 1 remand in which debaters see both reports (disclosed), escalation with no recommendation |
+| Anonymizing scribe | Renamed and reworded in v0.2. Same scrub and shuffle, plus self-label deletion. It anonymizes seats and origins, not orientations |
+| Provenance scribe | New in v0.2. 1 extra subagent that checks the verdict's claims against the record. Attribution, not truth. 1 return per run |
+| Output layout | New in v0.2. Verdict first, then what was removed from the user's message (by type), the scribe's removed claims, requested artifacts and the audit record |
 | Identity stripping | New. Phase 1 used regexes written for SycophancyEval's "Hello, my name is..." template. The skill uses written rules applied by the model |
-| Debater input | Changed. In the scripts, debaters received the full question and an instruction to ignore the introduction. Here they receive the stripped question (as in the paper's Figure 1) and keep the instruction |
-| Router | New. Phase 1 ran every pair on every question |
+| Debater input | Changed. In the scripts, debaters received the full question and an instruction to ignore the introduction. Here they receive the stripped question (as in the paper's Figure 1) and keep the instruction. v0.2 adds claims labels to the task envelope, next to the word limit: every empirical claim is labeled [known], [reported: kind of source] or [inference]. Labels make invention visible, not impossible |
+| Router | New. Phase 1 ran every pair on every question. v0.2 adds FIT_1, FIT_2, KIND and NO_FIT_NOTE for the audit record; they do not change the route |
 | Pre-flight and no-fit exits | New |
+| Failure ladder | New in v0.2. 1 retry, then MISSING markers with the error quoted verbatim. Nothing is reconstructed |
+| Dev mode | New in v0.2. Off by default. "DEF dev mode" in the user's message adds a per-call token table. Reporting only |
 | Orchestration | New. Separate subagents in place of separate API calls |
+| Angel envelope addendum | New in v0.2. Sent after the verbatim Angel (collectivist) prompt, outside it: the collective is the affected class or community, not the institutions that govern it. Added after an observed pole-fidelity failure. The verbatim prompt is unchanged |
 
 ### Debater framing: disciples in place of personas
 
@@ -133,13 +151,15 @@ mkdir -p ~/.claude/agents && cp agents/def-member.md ~/.claude/agents/
 
 Start a new session so both load. The member agent then registers as `def-member`. The member agent has Read, Grep and Glob only. If it is missing, the skill falls back to a general-purpose subagent with a read-only instruction, which is weaker.
 
-Installing def-member also lowers cost. Each def-member subagent used 6K to 8K tokens in testing, against about 54K for a general-purpose one (round 2, 1 run each). With def-member installed, a council run cost a median of $0.48 (round 7 eval, 9 runs, range $0.45 to $0.52, Claude Opus 5.5, 2026-10-31). Details are in `evals/RESULTS.md`.
+Installing def-member also lowers cost. Each def-member subagent used 6K to 8K tokens in testing, against about 54K for a general-purpose one (round 2, 1 run each). With def-member installed, a v0.1 council run cost a median of $0.48 (v0.1, Opus 5.5, 2026-10-31; round 7 eval, 9 runs, range $0.45 to $0.52). Details are in `evals/RESULTS.md`.
+
+v0.2 cost not yet measured; v0.2 adds 1 call typically and up to 6 in the worst case. The plan is in `evals/COST-TEST-PLAN.md`.
 
 For a single project, use `.claude/skills/` and `.claude/agents/` inside the project instead.
 
 ### Other surfaces
 
-The skill needs subagents to keep debaters and the arbiter blind. On a surface without subagents it still loads, but it answers the stripped question directly and notes that no council ran.
+The skill needs subagents to keep debaters and the arbiter isolated. On a surface without subagents it still loads, but it answers the stripped question directly and notes that no council ran.
 
 ## Try it
 
@@ -172,12 +192,30 @@ def-arbitration-skill/
   .claude-plugin/marketplace.json    marketplace listing this folder (source "./")
   .claude-plugin/icon.png            listing icon (1254 x 1254 PNG)
   skills/def-arbitration/SKILL.md    workflow, routing table, examples
-  skills/def-arbitration/references/ 1 file per pair, plus arbiter.md
-  agents/def-member.md               read-only member agent (router, debaters, arbiter)
-  evals/                             5 test cases, relay_diff.py, RESULTS.md, MEASUREMENT-PLAN.md
+  skills/def-arbitration/references/ 1 file per pair, plus arbiter.md (Justice cores, charter,
+                                     red lines, veto procedure) and provenance-scribe.md
+                                     (Provenance scribe prompt and return loop)
+  agents/def-member.md               read-only member agent (router, debaters, arbiter,
+                                     provenance scribe)
+  evals/                             5 original test cases, 5 v0.2 diagnostic cases (diag-*),
+                                     relay_diff.py, RESULTS.md, MEASUREMENT-PLAN.md
+  evals/LABEL-SWAP.md                label-swap invariance procedure and rubric
+  evals/POLE-FIDELITY.md             pole-fidelity check for the Angel seat
+  evals/FAILURE-LADDER.md            manual failure scenario and expected markers
+  evals/COST-TEST-PLAN.md            v0.2 cost runs (not run)
+  evals/cost_summary.py              summarizes pasted DEF-DEV-TOKENS v1 blocks (local, no model calls)
   README.md
   LICENSE
 ```
+
+## Limits
+
+- All seats run on the same underlying model, so they share its priors. Anonymization hides who wrote what, but it cannot remove a bias every seat shares.
+- Stance remains inferable from argument content.
+- The provenance scribe checks attribution, not truth.
+- Claims labels make invention visible, not impossible. A hallucinated claim can still carry a [reported] tag.
+- BurGal is a validity check in the paper, untested where consensus tracks truth (see `references/burgal.md`).
+- No v0.2 eval has been run. The status label above is unchanged.
 
 ## Citation
 

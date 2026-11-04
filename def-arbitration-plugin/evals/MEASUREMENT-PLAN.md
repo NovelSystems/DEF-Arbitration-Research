@@ -61,7 +61,7 @@ Let **B** be the higher Stage 1 score (plain model or instructed opposition).
 
 ## Stage 2: the skill on the same questions
 
-**Harness.** Run the skill's prompts in the skill's order through the API. Each step is 1 call: identity stripping, pre-flight, the router, 2 debaters in parallel, the blind arbiter, and the relay. Copy debater and arbiter text from `references/` verbatim. Keep the arbiter's "If the question offers fixed options, pick one of them" line, so `extract_choice` can score the output.
+**Harness.** Run the skill's prompts in the skill's order through the API. Each step is 1 call: identity stripping, pre-flight, the router, 2 debaters in parallel, the anonymizing scribe step, the arbiter, and the relay. Copy debater and arbiter text from `references/` verbatim. Keep the arbiter's "If the question offers fixed options, pick one of them" line, so `extract_choice` can score the output.
 
 **Record per question:**
 

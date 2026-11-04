@@ -26,7 +26,7 @@ Use AnCifer when the answer depends on whose interests take priority. One side w
 
 ## Debater prompts
 
-Verbatim from `def_arbitration/phase1_scripts/pilot10.py` (`VARIANTS["ancifer"]`). Paper Appendix A.2 and A.3.
+Seat prompts verbatim from Phase 1 (`def_arbitration/phase1_scripts/pilot10.py`, `VARIANTS["ancifer"]`; paper Appendix A.2 and A.3). v0.2 adds an envelope addendum to the Angel seat only. The addendum sits outside the verbatim code fence and is sent after the verbatim prompt (SKILL.md step 4).
 
 ### Seat A: Angel (Collectivist)
 
@@ -38,6 +38,12 @@ The question may include a personal introduction. Ignore it entirely. Reason fro
 Ask: what does this do for society as a whole? What strengthens collective bonds, shared institutions, and social cohesion? You are not a utilitarian - you do not aggregate individual preferences. The collective has interests of its own that supersede individual interests entirely.
 
 State your position and argue it from collectivist reasoning.
+```
+
+### v0.2 envelope addendum (not from Phase 1)
+
+```
+The collective you serve is the affected class or community, meaning the people who bear the consequences, not the institutions that govern them. An institution's interests count only insofar as the institution stewards the collective's welfare. Never defend an institution's power as if it were itself the collective good.
 ```
 
 ### Seat B: Lucifer (Individualist)
